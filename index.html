@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JETCONTROL MEGA</title>
+
+<style>
+
+body{
+  margin:0;
+  background:#000814;
+  color:#00f7ff;
+  font-family:Arial;
+}
+
+/* HEADER */
+header{
+  text-align:center;
+  padding:40px;
+}
+
+h1{
+  font-size:70px;
+  text-shadow:0 0 40px cyan;
+}
+
+/* SECTION */
+section{
+  padding:60px 20px;
+  border-top:1px solid cyan;
+}
+
+/* BUTTONS */
+button{
+  padding:15px 25px;
+  margin:10px;
+  font-size:16px;
+  border:none;
+  border-radius:12px;
+  background:cyan;
+  cursor:pointer;
+  box-shadow:0 0 20px cyan;
+}
+
+button:hover{
+  transform:scale(1.1);
+}
+
+/* GRID */
+.grid{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
+}
+
+.card{
+  width:250px;
+  padding:20px;
+  border:2px solid cyan;
+  border-radius:20px;
+  box-shadow:0 0 20px cyan;
+  text-align:center;
+}
+
+/* WARNING */
+.warning{
+  color:red;
+  font-weight:bold;
+}
+
+.success{
+  color:lime;
+  font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>JETCONTROL MEGA ✈️</h1>
+  <h2>Full Pilot Simulator + Training + Game</h2>
+</header>
+
+<!-- CONTROLS -->
+<section>
+<h2>Controls</h2>
+
+<button onclick="start()">Start Flight</button>
+<button onclick="altUp()">Altitude +</button>
+<button onclick="altDown()">Altitude -</button>
+<button onclick="spdUp()">Speed +</button>
+<button onclick="spdDown()">Speed -</button>
+<button onclick="refuel()">Refuel</button>
+<button onclick="gear()">Landing Gear</button>
+
+</section>
+
+<!-- DASHBOARD -->
+<section>
+<h2>Flight Dashboard</h2>
+
+<div class="grid">
+
+<div class="card"><h3>Altitude</h3><p id="alt">30000</p></div>
+<div class="card"><h3>Speed</h3><p id="spd">700</p></div>
+<div class="card"><h3>Fuel</h3><p id="fuel">100</p></div>
+<div class="card"><h3>Score</h3><p id="score">0</p></div>
+<div class="card"><h3>Status</h3><p id="status">READY</p></div>
+
+</div>
+</section>
+
+<!-- GAME -->
+<section>
+<h2>🎮 GAME MODE</h2>
+
+<p>Keep altitude 29000–31000</p>
+<p>Keep speed under 900</p>
+
+<h3 id="game">Press Start</h3>
+
+</section>
+
+<!-- MISSIONS -->
+<section>
+<h2>🚀 Missions</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>Mission 1</h3>
+<p>Fly stable for 30 seconds</p>
+</div>
+
+<div class="card">
+<h3>Mission 2</h3>
+<p>Keep fuel above 20%</p>
+</div>
+
+<div class="card">
+<h3>Mission 3</h3>
+<p>Maintain safe speed</p>
+</div>
+
+</div>
+
+</section>
+
+<!-- LEARNING -->
+<section>
+<h2>📘 Pilot Learning</h2>
+
+<div class="grid">
+
+<div class="card"><h3>Altitude</h3><p>Height above sea level</p></div>
+<div class="card"><h3>Speed</h3><p>Controls movement</p></div>
+<div class="card"><h3>Fuel</h3><p>Essential for flight</p></div>
+
+</div>
+
+</section>
+
+<script>
+
+let altitude = 30000;
+let speed = 700;
+let fuel = 100;
+let score = 0;
+let running = false;
+let time = 0;
+
+function update(){
+  document.getElementById("alt").innerText = altitude + " FT";
+  document.getElementById("spd").innerText = speed + " KM/H";
+  document.getElementById("fuel").innerText = fuel + "%";
+  document.getElementById("score").innerText = score;
+}
+
+/* START */
+function start(){
+  running = true;
+  document.getElementById("status").innerText = "FLYING";
+}
+
+/* CONTROLS */
+function altUp(){ altitude += 500; update(); }
+function altDown(){ altitude -= 500; update(); }
+function spdUp(){ speed += 50; update(); }
+function spdDown(){ speed -= 50; update(); }
+
+function refuel(){
+  fuel = 100;
+  update();
+}
+
+function gear(){
+  alert("Landing Gear Activated");
+}
+
+/* GAME LOOP */
+setInterval(() => {
+
+  if(!running) return;
+
+  fuel -= 1;
+  score += 2;
+  time++;
+
+  if(fuel <= 0){
+    document.getElementById("game").innerHTML =
+    "<span class='warning'>CRASH - NO FUEL</span>";
+    running = false;
+  }
+
+  else if(speed > 900){
+    document.getElementById("game").innerHTML =
+    "<span class='warning'>TOO FAST</span>";
+  }
+
+  else if(altitude < 29000 || altitude > 31000){
+    document.getElementById("game").innerHTML =
+    "<span class='warning'>BAD ALTITUDE</span>";
+  }
+
+  else{
+    document.getElementById("game").innerHTML =
+    "<span class='success'>STABLE FLIGHT</span>";
+  }
+
+  /* MISSION CHECK */
+  if(time > 30){
+    document.getElementById("game").innerHTML =
+    "<span class='success'>MISSION COMPLETE 🎉</span>";
+  }
+
+  update();
+
+},1000);
+
+</script>
+
+</body>
+</html>
+
